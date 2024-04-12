@@ -35,9 +35,9 @@ class Article(models.Model):
     ('p', 'منتشر شده'),
     )
     title = models.CharField(max_length= 200, verbose_name = "عنوان مقاله")
+    weight = models.CharField(max_length=20)
     slug = models.SlugField (max_length = 100, unique=True, verbose_name = "آدرس مقاله")
     author = models.ForeignKey(User, on_delete = models.CASCADE)
-    #category class should be above this line.
     category = models.ManyToManyField(category, verbose_name = "دسته‌بندی", related_name = "articles")
     description = models.TextField (verbose_name = "محتوا")
     thumbnail = models.ImageField (upload_to="images", verbose_name = " تصویر")
