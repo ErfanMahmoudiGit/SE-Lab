@@ -1,2 +1,1 @@
-In this project i'm learning django and testing it's features.
-This is a website to post ads for houses.
+This is an online shop to sell souveniers.
