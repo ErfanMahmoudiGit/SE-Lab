@@ -29,7 +29,6 @@ class category(models.Model):
 
     objects = CategoryManager()
 
-
 class Article(models.Model):
     STATUS_CHOICES = (
     ('d', 'پیش نویس'),
@@ -62,3 +61,32 @@ class Article(models.Model):
         return self.category.filter(status = True)
 
     objects = ArticleManager()
+
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
+    province = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    street = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.user.username}'s Address"
+
+class CustomUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20)
+    join_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    articles = models.ManyToManyField(Article)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    order_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username}"
