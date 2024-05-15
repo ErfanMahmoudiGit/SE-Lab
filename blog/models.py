@@ -28,6 +28,14 @@ class category(models.Model):
         return self.title
 
     objects = CategoryManager()
+    
+    def get_published_articles(self):
+        """Returns all published articles in this category."""
+        return self.articles.filter(status='p')
+
+    def get_child_categories(self):
+        """Returns all child categories of this category."""
+        return self.children.all()
 
 class Article(models.Model):
     STATUS_CHOICES = (
@@ -61,6 +69,22 @@ class Article(models.Model):
         return self.category.filter(status = True)
 
     objects = ArticleManager()
+    
+    def is_published(self):
+        """Checks if the article is published."""
+        return self.status == 'p'
+
+    def get_jalali_publish_date(self):
+        """Converts and returns the publish date in Jalali (Persian) calendar."""
+        return jalali_convertor(self.publish)
+
+    def get_related_categories(self):
+        """Returns all categories associated with this article."""
+        return self.category_published()
+
+    def get_thumbnail_url(self):
+        """Returns the URL of the article's thumbnail."""
+        return self.thumbnail.url
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
@@ -71,6 +95,11 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Address"
+    
+    def get_full_address(self):
+        """Returns the full address string."""
+        return f"{self.street}, {self.city}, {self.province}, {self.zip_code}"
+
 
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -81,6 +110,10 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    def get_full_name(self):
+        """Returns the full name of the user."""
+        return f"{self.name} {self.last_name}"
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -90,3 +123,12 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
+    
+    def get_ordered_articles(self):
+        """Returns all articles included in this order."""
+        return self.articles.all()
+
+    def get_order_total(self):
+        """Calculates and returns the total price of the order."""
+        return self.total_price
+    
