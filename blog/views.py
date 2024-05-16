@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
-from .models import Article, category as categ
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .models import Article, category as categ, Order, OrderItem
 from django.http import Http404
 from django.core.paginator import Paginator
 from django.contrib.auth import login, authenticate
@@ -66,3 +68,31 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, "blog/signup.html", {'form': form})
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Article, id=product_id)
+    order, created = Order.objects.get_or_create(user=request.user, order_date__isnull=True)
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+    if not created:
+        order_item.quantity += 1
+        order_item.save()
+    return redirect('shopping_cart')
+
+@login_required
+def shopping_cart(request):
+    order = Order.objects.filter(user=request.user, order_date__isnull=True).first()
+    return render(request, 'shopping_cart.html', {'order': order})
+
+@login_required
+def checkout(request):
+    order = Order.objects.filter(user=request.user, order_date__isnull=True).first()
+    if order:
+        order.order_date = timezone.now()
+        order.save()
+    return redirect('order_history')
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user, order_date__isnull=False)
+    return render(request, 'order_history.html', {'orders': orders})
