@@ -118,7 +118,7 @@ class CustomUser(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_date = models.DateTimeField(default=timezone.now)
+    order_date = models.DateTimeField(null=True, blank=True, default=None)
     
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
@@ -134,7 +134,7 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.name}"
+        return f"{self.quantity} of {self.product.title}"
 
     @property
     def total_price(self):

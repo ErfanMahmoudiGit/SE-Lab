@@ -23,7 +23,7 @@
                 {% if user.is_authenticated %}
                     <p class="navbar-brand">خوش آمدید  {{ user.username }} !&emsp;</p>
                     <button class="sign-out-button">
-                        <a href="{% url 'logout' %}"><img src="{% static "blog/assets/img/logout_icon.png" %}" class = sign-out-img ></a>
+                        <a href="{% url 'blog:logout' %}"><img src="{% static "blog/assets/img/logout_icon.png" %}" class = sign-out-img ></a>
                     </button>
                 {% else %}
                     <a class="navbar-brand" href="{% url 'blog:login' %}">ورود &emsp;</a>

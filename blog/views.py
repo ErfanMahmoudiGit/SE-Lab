@@ -63,20 +63,33 @@ def signup(request):
         form = UserCreationForm()
     return render(request, "blog/signup.html", {'form': form})
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .models import Article, Order, OrderItem
+
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Article, id=product_id)
-    order, created = Order.objects.get_or_create(user=request.user, order_date__isnull=True)
+    order, created = Order.objects.get_or_create(user=request.user, order_date=None)
     order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+    
     if not created:
         order_item.quantity += 1
         order_item.save()
+    
+    print(f"Product {product_id} added to cart. Redirecting to shopping cart. Order ID: {order.id}, Order Created: {created}, Order Items: {order.items.all()}")
     return redirect('blog:shopping_cart')
 
 @login_required
 def shopping_cart(request):
-    order = Order.objects.filter(user=request.user, order_date__isnull=True).first()
+    order = Order.objects.filter(user=request.user, order_date=None).first()
+    if order:
+        print(f"Shopping cart for user {request.user.username}: {order.items.all()}")
+    else:
+        print(f"No active order found for user {request.user.username}.")
     return render(request, 'blog/shopping-cart.html', {'order': order})
+
 
 @login_required
 def checkout(request):
