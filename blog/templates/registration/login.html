@@ -1,10 +1,23 @@
-{% extends 'blog/base.html' %}
-
+{%extends 'blog/base.html'%}
+{% load static%}
+{%block title%} | Login {%endblock%}
 {% block main %}
-    <h2>Login</h2>
-    <form method="post">
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('{% static "blog/assets/img/log.jpg" %}')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h1>ورود</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+    <form method="post" class = login-form>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Login</button>
+        <button type="submit">ورود</button>
     </form>
 {% endblock %}

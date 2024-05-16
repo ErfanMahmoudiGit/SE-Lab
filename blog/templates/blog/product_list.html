@@ -1,12 +1,26 @@
-{% extends 'blog/base.html' %}
-
-{% block content %}
-    <h2>Products</h2>
+{%extends 'blog/base.html'%}
+{% load static%}
+{%block title%} | Product List {%endblock%}
+{% block main %}
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('{% static "blog/assets/img/about-bg.jpg" %}')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h1>لیست کالا ها</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+    <h2>کالا ها</h2>
     <ul>
         {% for product in products %}
             <li>
                 {{ product.name }} - ${{ product.price }}
-                <a href="{% url 'product_detail' Article.id %}">View Details</a>
+                <a href="{% url 'blog:product_detail' Article.id %}">مشاهده جزییات</a>
             </li>
         {% endfor %}
     </ul>

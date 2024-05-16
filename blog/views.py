@@ -48,12 +48,6 @@ def category(request, slug, page=1):
     }
     return render (request, "blog/category.html", context)
 
-def shoppingcard (request):
-    context = {
-        # - means decending
-        "articles" : Article.objects.filter(status="p").order_by('-publish'),
-    }
-    return render (request, "blog/shopping-card.html", context)
 
 def signup(request):
     if request.method == 'POST':
@@ -77,12 +71,12 @@ def add_to_cart(request, product_id):
     if not created:
         order_item.quantity += 1
         order_item.save()
-    return redirect('shopping_cart')
+    return redirect('blog:shopping_cart')
 
 @login_required
 def shopping_cart(request):
     order = Order.objects.filter(user=request.user, order_date__isnull=True).first()
-    return render(request, 'shopping_cart.html', {'order': order})
+    return render(request, 'blog/shopping-cart.html', {'order': order})
 
 @login_required
 def checkout(request):
@@ -90,9 +84,9 @@ def checkout(request):
     if order:
         order.order_date = timezone.now()
         order.save()
-    return redirect('order_history')
+    return redirect('blog/order_history')
 
 @login_required
 def order_history(request):
     orders = Order.objects.filter(user=request.user, order_date__isnull=False)
-    return render(request, 'order_history.html', {'orders': orders})
+    return render(request, 'blog/order_history.html', {'orders': orders})

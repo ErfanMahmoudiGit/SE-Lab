@@ -1,28 +1,33 @@
 {%extends 'blog/base.html'%}
 {% load static%}
-{%block title%} | Order History {%endblock%}
+{%block title%} | Shopping Cart {%endblock%}
 {% block main %}
 <!-- Page Header-->
-<header class="masthead" style="background-image: url('{% static "blog/assets/img/about-bg.jpg" %}')">
+<header class="masthead" style="background-image: url('{% static "blog/assets/img/shp-cart.jpg" %}')">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="page-heading">
-                    <h1>تاریخچه سفارشات</h1>
+                    <h1>سبد خرید شما</h1>
                 </div>
             </div>
         </div>
     </div>
 </header>
 <!-- Main Content-->
-    <h2>Order History</h2>
-    {% for order in orders %}
-        <h3>Order {{ order.id }} - {{ order.order_date }}</h3>
+    {% if order %}
         <ul>
             {% for item in order.items.all %}
                 <li>{{ item.quantity }} of {{ item.product.name }} - ${{ item.total_price }}</li>
             {% endfor %}
         </ul>
-        <p>Total Price: ${{ order.total_price }}</p>
-    {% endfor %}
+        <p>قیمت کل: ${{ order.total_price }}</p>
+        <form action="{% url 'blog:checkout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">پرداخت</button>
+        </form>
+    {% else %}
+        <p>سبد خرید شما خالی است.</p>
+    {% endif %}
+    <a href="{% url 'blog:home' %}">ادامه خرید</a>
 {% endblock %}
