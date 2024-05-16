@@ -21,6 +21,10 @@
             <div class="col-md-10 col-lg-8 col-xl-7 text-justify">
                 {{article.description|linebreaks}}
             </div>
+            <form action="{% url 'add_to_cart' article.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">افزودن به سبد خرید</button>
+            </form>
         </div>
     </div>
 </article>
