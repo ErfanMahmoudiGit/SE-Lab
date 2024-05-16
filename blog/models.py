@@ -126,10 +126,8 @@ class Order(models.Model):
         return f"Order {self.id} by {self.user.username}"
     
     def get_ordered_articles(self):
-        """Returns all articles included in this order."""
         return self.articles.all()
 
     def get_order_total(self):
-        """Calculates and returns the total price of the order."""
         return self.total_price
     
