@@ -4,8 +4,8 @@ from ..models import category
 register = template.Library()
 
 @register.simple_tag
-def name():
-    return "Erfan Mahmoudi"
+def git():
+    return "See Git Hub"
 
 
 @register.inclusion_tag("blog/partials/category_navbar.html")
