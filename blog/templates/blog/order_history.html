@@ -15,14 +15,13 @@
     </div>
 </header>
 <!-- Main Content-->
-    <h2>Order History</h2>
     {% for order in orders %}
         <h3>Order {{ order.id }} - {{ order.order_date }}</h3>
         <ul>
             {% for item in order.items.all %}
-                <li>{{ item.quantity }} of {{ item.product.name }} - ${{ item.total_price }}</li>
+                <li>{{ item.quantity }} of {{ item.product.title }} - ${{ item.total_price }}</li>
             {% endfor %}
         </ul>
-        <p>Total Price: ${{ order.total_price }}</p>
+        <p>قیمت کل: ${{ order.total_price }}</p>
     {% endfor %}
 {% endblock %}

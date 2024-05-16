@@ -18,10 +18,10 @@
     {% if order %}
         <ul>
             {% for item in order.items.all %}
-                <li>{{ item.quantity }} of {{ item.product.name }} - ${{ item.total_price }}</li>
+                <li>تعداد {{ item.quantity }} عدد از  {{ item.product.title }} - {{ item.total_price }} تومان</li>
             {% endfor %}
         </ul>
-        <p>قیمت کل: ${{ order.total_price }}</p>
+        <p>قیمت کل: {{ order.total_price }} تومان</p>
         <form action="{% url 'blog:checkout' %}" method="post">
             {% csrf_token %}
             <button type="submit">پرداخت</button>
