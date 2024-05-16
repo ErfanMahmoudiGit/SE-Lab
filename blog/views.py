@@ -97,7 +97,7 @@ def checkout(request):
     if order:
         order.order_date = timezone.now()
         order.save()
-    return redirect('blog/order_history')
+    return redirect('blog:order_history')
 
 @login_required
 def order_history(request):
