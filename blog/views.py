@@ -2,8 +2,11 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import Article, category as categ
 from django.http import Http404
 from django.core.paginator import Paginator
-
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import redirect
 from django.views.generic.list import ListView
+
 class ArticleList(ListView):
     template_name = "blog/home.html"
     queryset = Article.objects.filter(status="p").order_by('-publish')
@@ -42,3 +45,24 @@ def category(request, slug, page=1):
         "articles" : articles,
     }
     return render (request, "blog/category.html", context)
+
+def shoppingcard (request):
+    context = {
+        # - means decending
+        "articles" : Article.objects.filter(status="p").order_by('-publish'),
+    }
+    return render (request, "blog/shopping-card.html", context)
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('/') # Redirect to a view named 'home' after signup
+    else:
+        form = UserCreationForm()
+    return render(request, "blog/signup.html", {'form': form})

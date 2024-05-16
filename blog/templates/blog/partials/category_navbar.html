@@ -1,3 +1,4 @@
+{% load static %}
 <div class="collapse navbar-collapse nav" id="navbarResponsive">
     <ul class="navbar-nav ms-auto py-4 py-lg-0">
         <li class="nav-item">
@@ -15,5 +16,8 @@
         {% endfor %}
         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:about' %}">درباره</a></li>
         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:contact' %}">پشتیبانی</a></li>
+        <button class="shopping-card-button">
+          <a href="{% url 'blog:shoppingcard' %}"><img src="{% static "blog/assets/img/shopping-cart.png" %}" class = shopping-card-image ></a>
+        </button>
     </ul>
 </div>
